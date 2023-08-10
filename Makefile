@@ -6,7 +6,7 @@
 #    By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/08 14:35:13 by yejlee2           #+#    #+#              #
-#    Updated: 2023/08/10 09:33:57 by yejlee2          ###   ########.fr        #
+#    Updated: 2023/08/10 11:35:09 by yejlee2          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,11 @@ CC = cc
 NAME = minishell
 CFLAGS = -Wall -Wextra -Werror
 SRCS = srcs/main.c \
+		srcs/main_utils.c \
 		srcs/start_shell.c \
-		srcs/init.c
+		srcs/init.c \
+		srcs/execute/execute.c \
+		srcs/parse/parse.c
 OBJS = $(SRCS:.c=.o)
 INCS = incs
 LIBFT = libft

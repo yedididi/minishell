@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 16:37:32 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/10 09:33:50 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/10 13:05:54 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,18 @@ void	start_shell(void)
 	signal(SIGINT, handler);
     while (1)
     {
-        line = readline("minishell> ");
-        if (line)
+        line = readline("minishell $ ");
+        if (!line) //ctrl+d
+            break ;
+        if (*line != '\0')
+            add_history(line);
+        if (*line != '\0' && is_whitespace(line) == 0)
         {
+            // printf("%s\n", line);
             parse();
             execute();
-            add_history(line);
-            free(line);
-        	line = NULL;
         }
-        else
-            printf("ctrl + d\n");
+        free(line);
     }
 }
 
