@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/10 11:37:17 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/10 13:26:32 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@ void	error();
 
 void    rl_replace_line (const char *text, int clear_undo);
 
-void    handler(int signum);
 void	start_shell(void);
 
 void    init(int argc, char *argv[], char *envp[]);
+void	set_signal();
+void    handler(int signum);
 
-int	is_whitespace(char *line);
+int	    is_whitespace(char *line);
 
 void	parse();
 

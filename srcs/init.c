@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 16:41:09 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/10 13:05:32 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/10 13:26:33 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,25 @@ void    init(int argc, char *argv[], char *envp[])
 	new_term.c_cc[VTIME] = 0;              // 시간은 설정하지 않음
 	tcsetattr(STDIN_FILENO, TCSANOW, &new_term); // 변경된 속성의 터미널을 STDIN에 바로 적용
 	//시그널 처리(SIGINT, SIGQUIT 무시)
-	// set_signal();
+	set_signal();
 	(void)envp;
 	(void)argc;
 	(void)argv;
+}
+
+void	set_signal()
+{
+	signal(SIGINT, handler); // CTRL + C > prompt 출력
+    // signal(SIGTERM, handler); // CTRL + D > 쉘 종료 >>> 이미 앞에서 처리함
+    signal(SIGQUIT, SIG_IGN); // CTRL + / > 아무것도 안함
+}
+
+void handler(int signum)
+{
+    if (signum != SIGINT)
+        return;
+	write(1, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 1);
+    rl_redisplay();
 }
