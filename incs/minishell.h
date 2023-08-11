@@ -21,6 +21,23 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+typedef struct  s_env_node
+{
+    char    *variable;
+    char    *value;
+    struct  s_env_node  next_node;
+} t_env_node;
+
+// typedef struct  s_env_info
+// {
+//     struct  s_env_node  head;
+//     struct  s_env_node  tail;
+// } t_env_info;
+
+// t_env_info  env_info;
+
+struct  s_env_node  env_head;
+
 void	error();
 
 void    rl_replace_line (const char *text, int clear_undo);

@@ -25,8 +25,8 @@ void	start_shell(void)
             add_history(line);
         if (*line != '\0' && is_whitespace(line) == 0)
         {
-            parse();
-            execute();
+            parse(); //자료구조(트리, 연결리스트...)에 명령어들을 토큰 단위로 분리하고 유효성 검사 완료
+            execute(); //파이프 기준으로 먼저 나누어 fork, 후에 실행
         }
         free(line);
     }
