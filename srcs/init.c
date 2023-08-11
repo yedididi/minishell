@@ -6,16 +6,16 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 16:41:09 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/10 13:26:33 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/11 15:15:45 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/minishell.h"
 
-void    init(int argc, char *argv[], char *envp[])
+void    init(int argc, char *argv[], char *envp[], t_minishell *minishell)
 {
 	struct termios  new_term;
-    
+
 	//각종 초기화를 진행
 	//환경변수 전역변수화
 	if (argc != 1)
@@ -30,7 +30,7 @@ void    init(int argc, char *argv[], char *envp[])
 	set_signal();
 
 	//단일연결리스트로 환경변수 저장해두기.
-	envp_to_list(envp);
+	envp_to_list(envp, minishell);
 
 	(void)envp;
 	(void)argc;
@@ -52,22 +52,4 @@ void handler(int signum)
     rl_on_new_line();
     rl_replace_line("", 1);
     rl_redisplay();
-}
-
-void    envp_to_list(char **envp)
-{
-    char    *variable;
-    char    *value;
-    int     i;
-
-    i = 0;
-    init_list();
-    //한 줄 안에서 =를 기준으로 variable과 value를 나누어 노드 생성. 
-    while (envp[i])
-    {
-        variable = get_variable(envp[i]);
-        value = get_value(envp[i]);
-        add_newnode(variable, value);
-        i++;
-    }
 }
