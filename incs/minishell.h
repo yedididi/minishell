@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/11 15:37:32 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/12 11:23:39 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,15 @@ typedef struct s_minishell
 
 }	t_minishell;
 
+#define WHITESPACE "\t\n\v\f\r "
+#define REDIRECTION "<>"
+
+typedef struct s_list
+{
+	char			*data;
+	struct s_list	*next;
+}	t_list;
+
 void	error();
 
 void    rl_replace_line (const char *text, int clear_undo);
@@ -56,8 +65,14 @@ void	free_envnode(t_env_node *node);
 
 int	    is_whitespace(char *line);
 
-void	parse();
-
 void	execute();
+
+t_list	*ft_tokenize(char *line);
+
+int	ft_isspace(char ch);
+char	*ft_strndup(char *src, int len);
+
+t_list	*ft_newnode(char *data);
+void	ft_lstadd(t_list **head, t_list *node);
 
 #endif

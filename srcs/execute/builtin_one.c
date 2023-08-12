@@ -6,27 +6,27 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/11 16:53:35 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/12 11:23:36 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
 
-void    env(t_minishell *minishell)
+void	env(t_minishell *minishell)
 {
-    t_env_node *node;
+	t_env_node	*node;
 
-    node = minishell->env_head->next_node;
-    while (1)
-    {
-        ft_putstr_fd(node->variable, 1);
+	node = minishell->env_head->next_node;
+	while (1)
+	{
+		ft_putstr_fd(node->variable, 1);
 		write(1, "=", 1);
 		ft_putstr_fd(node->value, 1);
 		write(1, "\n", 1);
-        if (node->next_node == 0)
-            break ;
-        node = node->next_node;
-    }
+		if (node->next_node == 0)
+			break ;
+		node = node->next_node;
+	}
 }
 
 void	export(t_minishell *minishell, char *variable, char *value)
@@ -71,6 +71,7 @@ void	cd(char *dirname, t_minishell *minishell)
 
 	if (chdir(dirname) == 1)
 	{
+		//print error statement
 		ft_putstr_fd("bash: cd: ", 1);
 		ft_putstr_fd(dirname, 1);
 		ft_putstr_fd(": No such file or directory", 1);

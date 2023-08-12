@@ -6,7 +6,7 @@
 #    By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/08 14:35:13 by yejlee2           #+#    #+#              #
-#    Updated: 2023/08/11 15:28:49 by yejlee2          ###   ########.fr        #
+#    Updated: 2023/08/12 11:23:24 by yejlee2          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ SRCS = srcs/main.c \
 		srcs/env_list.c \
 		srcs/env.c \
 		srcs/execute/execute.c \
-		srcs/parse/parse.c
+		srcs/parse/parse.c \
+		srcs/parse/parse_list.c \
+		srcs/parse/parse_util.c
 OBJS = $(SRCS:.c=.o)
 INCS = incs
 LIBFT = libft/libft.a

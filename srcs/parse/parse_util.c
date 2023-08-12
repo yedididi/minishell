@@ -1,23 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
+/*   parse_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/14 11:59:45 by yejlee2           #+#    #+#             */
-/*   Updated: 2022/11/21 12:54:01 by yejlee2          ###   ########.fr       */
+/*   Created: 2023/08/12 11:21:14 by yejlee2           #+#    #+#             */
+/*   Updated: 2023/08/12 11:21:48 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../incs/minishell.h"
 
-t_list	*ft_lstlast(t_list *lst)
+int	ft_isspace(char ch)
 {
-	if (lst)
-	{	
-		while (lst->next)
-			lst = lst->next;
+	int	i;
+
+	i = 0;
+	if (ch == 0)
+		return (1);
+	while (ch != WHITESPACE[i] && WHITESPACE[i])
+		++i;
+	if (i < 6)
+		return (1);
+	return (0);
+}
+
+char	*ft_strndup(char *src, int len)
+{
+	char	*result;
+	int		i;
+
+	result = malloc(len);
+	i = 0;
+	while (i < len)
+	{
+		result[i] = src[i];
+		++i;
 	}
-	return (lst);
+	result[i] = '\0';
+	return (result);
 }
