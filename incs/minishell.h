@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/12 12:28:41 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/12 13:36:19 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@
 #define WHITESPACE "\t\n\v\f\r "
 #define REDIRECTION "<>"
 
+typedef enum    s_rdr_type
+{
+    IN_RDR, //< 0
+    OUT_RDR, //> 1
+    ININ_RDR, //<< 2
+    OUTOUT_RDR, //>> 3
+} t_rdr_type;
+
 typedef struct  s_env_node
 {
     char    *variable;
@@ -40,7 +48,6 @@ typedef struct s_list
 
 typedef struct s_wd
 {
-    int type; //file, command(with option and path), argument
     char    **words;
     struct s_wd *next_wd;
 } t_wd;
@@ -48,6 +55,7 @@ typedef struct s_wd
 typedef struct s_rdr
 {
     int type; //> < >> <<
+    char *filename;
     struct s_rdr    *next_rdr;
 }   t_rdr;
 
