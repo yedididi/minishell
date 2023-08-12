@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/14 12:04:24 by yejlee2           #+#    #+#             */
-/*   Updated: 2022/11/22 13:53:09 by yejlee2          ###   ########.fr       */
+/*   Created: 2023/08/10 11:32:42 by yejlee2           #+#    #+#             */
+/*   Updated: 2023/08/10 11:35:12 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../incs/minishell.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
+int	is_whitespace(char *line)
 {
-	t_list	*tmp;
-
-	if (lst == 0)
-		return ;
-	while (*lst)
+	while (*line)
 	{
-		tmp = (*lst)->next;
-		ft_lstdelone(*lst, del);
-		*lst = tmp;
+		if (*line != ' ' && !(*line >= 9 && *line <= 13))
+			return (0);
+		line++;
 	}
-	*lst = 0;
+	return (1);
 }

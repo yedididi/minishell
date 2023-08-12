@@ -1,22 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
+/*   parse_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/14 12:04:00 by yejlee2           #+#    #+#             */
-/*   Updated: 2022/11/21 12:53:53 by yejlee2          ###   ########.fr       */
+/*   Created: 2023/08/12 11:21:12 by yejlee2           #+#    #+#             */
+/*   Updated: 2023/08/12 11:21:31 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../incs/minishell.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
+t_list	*ft_newnode(char *data)
 {
-	if (lst)
+	t_list	*new_node;
+
+	new_node = malloc(sizeof(t_list));
+	new_node->data = data;
+	new_node->next = NULL;
+	return (new_node);
+}
+
+void	ft_lstadd(t_list **head, t_list *node)
+{
+	t_list	*tmp;
+
+	if (!*head)
+		*head = node;
+	else
 	{
-		del(lst->content);
-		free(lst);
+		tmp = *head;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = node;
 	}
 }

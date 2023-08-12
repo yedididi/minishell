@@ -6,13 +6,13 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/10 09:39:20 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/12 11:25:50 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
 
-void	execute()
+void	execute(t_minishell *minishell)
 {
-	
+	(void)minishell;
 }
