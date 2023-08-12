@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/12 11:23:39 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/12 12:28:41 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,47 @@
 #include <readline/history.h>
 #include "../libft/libft.h"
 
+#define WHITESPACE "\t\n\v\f\r "
+#define REDIRECTION "<>"
+
 typedef struct  s_env_node
 {
     char    *variable;
     char    *value;
     struct  s_env_node  *next_node;
 } t_env_node;
-
-typedef struct s_minishell
-{
-    t_env_node	*env_head;
-
-}	t_minishell;
-
-#define WHITESPACE "\t\n\v\f\r "
-#define REDIRECTION "<>"
-
+ 
 typedef struct s_list
 {
 	char			*data;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_wd
+{
+    int type; //file, command(with option and path), argument
+    char    **words;
+    struct s_wd *next_wd;
+} t_wd;
+
+typedef struct s_rdr
+{
+    int type; //> < >> <<
+    struct s_rdr    *next_rdr;
+}   t_rdr;
+
+typedef struct s_group
+{
+    t_wd            *wd_head;
+    t_rdr           *rdr_head;
+    struct s_group    *next_group;
+}   t_group;
+
+typedef struct s_minishell
+{
+    t_env_node	*env_head;
+    t_group   *group_head;
+}	t_minishell;
 
 void	error();
 
