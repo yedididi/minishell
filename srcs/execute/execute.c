@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/12 17:00:20 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 10:26:51 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,29 @@ void	execute(t_minishell *minishell)
 
 void	execute_group(t_group *group)
 {
+	t_rdr	*rdr_in;
+	int		*out_fd;
+	int		i;
+
+	i = 0;
+	//마지막까지 확인한 뒤, 최종 입력 리다이렉션을 명령어의 입력으로 넣어준다. (dup 한번)
+	rdr_in = find_input_rdr(group);
+	dup2(rdr_in->fd, STDIN);
+	//명령어를 실행
+	execute_cmd();
+	//명령어의 출력값을 출력 리다이렉션 파일들에게 하나씩 전달해준다. (dup 여러번)
+	out_fd = find_output_rdr(group);
+	while (out_fd[i] != 0)
+	{
+		dup2(out_fd[i], out_fd[i + 1]);
+		i++;
+	}
+}
+
+t_rdr	*find_input_rdr(t_group *group)
+{
 	t_rdr	*rdr;
 	t_rdr	*rdr_in;
-	t_rdr	*rdr_out;
 
 	rdr = group->rdr_head;
 	rdr_in = NULL;
@@ -55,29 +75,48 @@ void	execute_group(t_group *group)
 	{
 		if (rdr->type == IN_RDR)
 			rdr_in = rdr;
+		if (rdr->type == OUT_RDR)
+			group->out_len++;
 		if (rdr == group->rdr_tail)
 			break ;
 		rdr = rdr->next_rdr;
 	}
-	rdr->fd = open(rdr->filename, O_RDONLY);
-	if (rdr->fd == -1)
-		error_input();
-	//마지막까지 확인한 뒤, 최종 입력 리다이렉션을 명령어의 입력으로 넣어준다. (dup 한번)
-	dup2(rdr->fd, STDIN);
-	//명령어를 실행
-	execute_cmd();
-	//명령어의 출력값을 출력 리다이렉션 파일들에게 하나씩 전달해준다. (dup 여러번)
+	if (rdr_in)
+	{
+		rdr_in->fd = open(rdr_in->filename, O_RDONLY);
+		if (rdr_in->fd == -1)
+			error_input();
+	}
+	return (rdr_in);
+}
+
+int	*find_output_rdr(t_group *group)
+{
+	t_rdr	*rdr;
+	int		*out_fd;
+	int		i;
+
+	i = 0;
 	rdr = group->rdr_head;
+	out_fd = (int *)malloc((sizeof(int) * (group->out_len + 2)));
+	if (out_fd == 0)
+		error_input();
+	out_fd[i++] = STDOUT;
 	while (1)
 	{
-		//out_rdr이면 파일 다 열고 fd 저장해두기. (int 배열에 저장, 맨 처음 값은 std_out) 
+		//out_rdr이면 파일 다 열고 fd 저장해두기. (int 배열에 저장, 맨 처음 값은 std_out)
 		if (rdr->type == OUT_RDR)
-			//파일 읽고 배열에 fd 저장
-			dup2(rdr->fd, rdr->prev_rdr->fd);//이건 나중에 한꺼번에
+		{
+			rdr->fd = open(rdr->filename, O_RDONLY);
+			if (rdr->fd == -1)
+				error_input();
+			out_fd[i++] = rdr->fd; //파일 읽고 배열에 fd 저장
+		}
 		if (rdr == group->rdr_tail)
 			break ;
 		rdr = rdr->next_rdr;
 	}
+	out_fd[i] = 0;
 }
 
 void	end_input(t_group *group)

@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/12 16:36:10 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 10:13:44 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "../libft/libft.h"
+#include "parse.h"
 
 #define WHITESPACE "\t\n\v\f\r "
 #define REDIRECTION "<>"
 #define	STDIN	0
 #define	STDOUT	1
-
-typedef enum    e_rdr_type
-{
-    IN_RDR, //< 0
-    OUT_RDR, //> 1
-    ININ_RDR, //<< 2
-    OUTOUT_RDR, //>> 3
-} t_rdr_type;
 
 typedef struct  s_env_node
 {
@@ -48,32 +41,6 @@ typedef struct s_list
 	char			*data;
 	struct s_list	*next;
 }	t_list;
-
-typedef struct s_wd
-{
-    char    *words;
-    struct s_wd *next_wd;
-} t_wd;
-
-typedef struct s_rdr
-{
-    int type; //> < >> <<
-    char *filename;
-	int				fd;
-    struct s_rdr    *next_rdr;
-	struct s_rdr    *prev_rdr;
-}   t_rdr;
-
-typedef struct s_group
-{
-    t_wd            *wd_head;
-    t_rdr           *rdr_head;
-	t_rdr           *rdr_tail;
-    int             pipe[2]; //-1로 초기화
-	pid_t			pid; //NULL로 초기화
-    struct s_group	*prev_group;
-    struct s_group	*next_group;
-}   t_group;
 
 typedef struct s_minishell
 {
