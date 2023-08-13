@@ -6,7 +6,7 @@
 #    By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/08 14:35:13 by yejlee2           #+#    #+#              #
-#    Updated: 2023/08/12 11:23:24 by yejlee2          ###   ########.fr        #
+#    Updated: 2023/08/13 14:34:10 by yejlee2          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,11 @@ SRCS = srcs/main.c \
 		srcs/init.c \
 		srcs/env_list.c \
 		srcs/env.c \
+		srcs/execute/execute_rdr.c \
+		srcs/execute/builtin_one.c \
+		srcs/execute/builtin_two.c \
+		srcs/execute/execute_cmd.c \
+		srcs/execute/execute_utils.c \
 		srcs/execute/execute.c \
 		srcs/parse/parse.c \
 		srcs/parse/parse_list.c \

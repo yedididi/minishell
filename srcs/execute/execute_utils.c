@@ -1,44 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/10 09:34:12 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 14:49:26 by yejlee2          ###   ########.fr       */
+/*   Created: 2023/08/13 11:28:33 by yejlee2           #+#    #+#             */
+/*   Updated: 2023/08/13 16:17:12 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
 
-t_list *parse(char *line, t_minishell *minishell)
+void	error_input(void)
 {
-	t_list *token;
-
-	(void)minishell;
-	token = ft_tokenize(line);
-	return (token);
+	//일단 여러 개의 그룹을 다 프리해준다.
+	//열린 프로세스들도 kill로 다 죽여준다.
+	//후에 start_shell 함수 안에 있는 while문으로 돌아가게 해준다
+	
 }
 
-t_list	*ft_tokenize(char *line)
+int	str_find_chr(char *str, char c)
 {
-	t_list	*token;
-	int		len;
+	int i;
 
-	token = NULL;
-	while (*line)
+	i = 0;
+	while (str[i])
 	{
-		if (ft_isspace(*line))
-			++line;
-		else
-		{
-			len = 0;
-			while (!ft_isspace(line[len]))
-				++len;
-			ft_lstadd(&token, ft_newnode(ft_strndup(line, len)));
-			line += len;
-		}
+		if (c == str[i])
+			return (i);
+		i++;
 	}
-	return (token);
+	return (0);
 }

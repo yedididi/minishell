@@ -1,44 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   builtin_two.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/10 09:34:12 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 14:49:26 by yejlee2          ###   ########.fr       */
+/*   Created: 2023/08/13 14:31:40 by yejlee2           #+#    #+#             */
+/*   Updated: 2023/08/13 16:36:55 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
 
-t_list *parse(char *line, t_minishell *minishell)
+void    echo(t_group *group)
 {
-	t_list *token;
+    t_wd    *wd;
 
-	(void)minishell;
-	token = ft_tokenize(line);
-	return (token);
+    wd = group->wd_head;
+    while (wd)
+    {
+        ft_putstr_fd(wd->word, 1);
+        write(1, " ", 1);
+        wd = wd->next;
+    }
+    write(1, "\n", 1);
 }
 
-t_list	*ft_tokenize(char *line)
+void    exiit(t_group *group)
 {
-	t_list	*token;
-	int		len;
 
-	token = NULL;
-	while (*line)
-	{
-		if (ft_isspace(*line))
-			++line;
-		else
-		{
-			len = 0;
-			while (!ft_isspace(line[len]))
-				++len;
-			ft_lstadd(&token, ft_newnode(ft_strndup(line, len)));
-			line += len;
-		}
-	}
-	return (token);
 }

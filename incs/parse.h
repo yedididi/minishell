@@ -6,22 +6,20 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:03:28 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 11:25:27 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 15:31:46 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSE_H
 # define PARSE_H
 
-# include <stdlib.h>
-
 # define WHITESPACE "\t\n\v\f\r "
 
 enum e_token_type
 {
-	WORD,
-	REDIR,
-	FILENAME,
+	word,
+	redir,
+	filename,
 } t_token_type;
 
 typedef struct s_token
@@ -39,13 +37,13 @@ typedef struct s_wd
 
 enum e_rdr_type
 {
-	IN_RDR,		// < : 0
-	OUT_RDR,	// > : 1
-	ININ_RDR,	// << : 2
-	OUTOUT_RDR,	// >> : 3
+	in_rdr,		// < : 0
+	out_rdr,	// > : 1
+	inin_rdr,	// << : 2
+	outout_rdr,	// >> : 3
 } t_rdr_type;
 
-typedef struct s_rdr
+typedef struct s_rdr //원형
 {
 	int				type;	// IN_RDR, OUT_RDR, ININ_RDR, OUTOUT_RDR
 	char			*filename;
@@ -54,7 +52,14 @@ typedef struct s_rdr
 	struct s_rdr	*next_rdr;
 }	t_rdr;
 
-typedef struct s_group
+typedef struct  s_env_node
+{
+    char    *variable;
+    char    *value;
+    struct  s_env_node  *next_node;
+} t_env_node;
+
+typedef struct s_group //원형아님
 {
 	t_wd			*wd_head;	// head : command, others : option & path
 	t_rdr			*rdr_head;
@@ -62,7 +67,8 @@ typedef struct s_group
 	int             pipe[2]; //-1로 초기화
 	pid_t			pid; //NULL로 초기화
 	int				out_len; //0 init
-	char			**envp; //main에서 받은 envp 값 그대로
+	char			**envp; //main에서 받은 envp 값 그대로 넣으면 됨
+	t_env_node		*env_head; //minishell 구조체에 있는 값 그대로 넣으면 됨
 	struct s_group	*prev_group;
 	struct s_group	*next_group;
 }	t_group;

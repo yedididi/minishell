@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 11:25:30 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 16:17:10 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,6 @@
 #define REDIRECTION "<>"
 #define	STDIN	0
 #define	STDOUT	1
-
-typedef struct  s_env_node
-{
-    char    *variable;
-    char    *value;
-    struct  s_env_node  *next_node;
-} t_env_node;
  
 typedef struct s_list
 {
@@ -52,7 +45,7 @@ void	error();
 
 void    rl_replace_line (const char *text, int clear_undo);
 
-void	start_shell(void);
+void	start_shell(t_minishell *minishell);
 
 void    init(int argc, char *argv[], char *envp[], t_minishell *minishell);
 void	set_signal();
@@ -64,16 +57,40 @@ char    *get_value(char *envp);
 
 void	init_env_list(t_minishell *minishell);
 t_env_node	*create_new_envnode(char *variable, char *value);
-void	add_new_envnode(char *variable, char *value, t_minishell *minishell);
+void	add_new_envnode(char *variable, char *value, t_env_node *env_head);
 void	free_envnode(t_env_node *node);
+t_env_node	*search_envnode(char *variable, t_env_node *env_head);
 
 int	    is_whitespace(char *line);
 
-void	execute();
+void	execute(t_minishell *minishell);
+void	execute_group(t_group *group);
+void	execute_group_pipe(t_group *group);
+void	end_input(t_group *group);
 
+t_rdr	*find_input_rdr(t_group *group);
+int	    *find_output_rdr(t_group *group);
+
+void	env(t_group *group);
+void	export(t_env_node *env_head, char *str);
+void	unset(t_env_node *env_head, char *variable);
+void	pwd(void);
+void	cd(char *dirname, t_env_node *env_head);
+
+void    echo(t_group *group);
+
+void	execute_cmd(t_group *group);
+void	execute_regular(t_group *group);
+char	*get_cmd_path(char **path, char *cmd);
+char	**get_option(t_group *group);
+
+void	error_input(void);
+int	    str_find_chr(char *str, char c);
+
+t_list  *parse(char *line, t_minishell *minishell);
 t_list	*ft_tokenize(char *line);
 
-int	ft_isspace(char ch);
+int	    ft_isspace(char ch);
 char	*ft_strndup(char *src, int len);
 
 t_list	*ft_newnode(char *data);

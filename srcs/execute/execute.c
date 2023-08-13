@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 11:25:31 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 14:32:55 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@ void	execute(t_minishell *minishell)
 			pipe(group->pipe);
 			group->pid = fork();
 			if (group->pid < 0) //포크 에러
-				error_input(); //그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
+				error_input();
+			//그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
 			else if (group->pid == 0) //자식 프로세스
 			{
-				execute_group(group);
+				execute_group_pipe(group);
 				exit (0); //해당 자식 프로세스 종료
 			}
 			//else, 그러니까 부모 프로세스는 파이프를 더 찾는다
@@ -52,7 +53,10 @@ void	execute_group(t_group *group)
 	//마지막까지 확인한 뒤, 최종 입력 리다이렉션을 명령어의 입력으로 넣어준다. (dup 한번)
 	rdr_in = find_input_rdr(group);
 	if (rdr_in)
+	{
 		dup2(rdr_in->fd, STDIN);
+		close(rdr_in->fd); //여기서 닫아도 될가......
+	}
 	//명령어의 출력값을 출력 리다이렉션 파일들에게 하나씩 전달해준다. (dup 여러번)
 	if (group->out_len != 0)
 	{
@@ -60,67 +64,30 @@ void	execute_group(t_group *group)
 		while (out_fd[i + 1] != 0)
 		{
 			dup2(out_fd[i], out_fd[i + 1]);
+			close(out_fd[i]); //여기서 닫아도 될가......
 			i++;
 		}
 	}
 	//명령어를 실행
-	execute_cmd();
+	execute_cmd(group);
 }
 
-t_rdr	*find_input_rdr(t_group *group)
+void	execute_group_pipe(t_group *group)
 {
-	t_rdr	*rdr;
-	t_rdr	*rdr_in;
-
-	rdr = group->rdr_head;
-	rdr_in = NULL;
-	//원형연결리스트 (t_rdr) 돌면서 입력 리다이렉션 (<) 찾는다. 또 나오면 갱신함.
-	while (1)
+	if (group->prev_group) //전 파이프와 연결
 	{
-		if (rdr->type == IN_RDR)
-			rdr_in = rdr;
-		if (rdr->type == OUT_RDR)
-			group->out_len++;
-		if (rdr == group->rdr_tail)
-			break ;
-		rdr = rdr->next_rdr;
+		close(group->prev_group->pipe[1]);
+		dup2(group->prev_group->pipe[0], STDIN);
+		close(group->prev_group->pipe[0]); //여기서 닫아도 될가..........
 	}
-	if (rdr_in)
+	if (group->next_group) //뒤 파이프와 연결
 	{
-		rdr_in->fd = open(rdr_in->filename, O_RDONLY);
-		if (rdr_in->fd == -1)
-			error_input();
+		close(group->pipe[0]);
+		dup2(group->pipe[1], STDOUT);
+		close(group->pipe[1]);
 	}
-	return (rdr_in);
-}
+	execute_group(group);
 
-int	*find_output_rdr(t_group *group)
-{
-	t_rdr	*rdr;
-	int		*out_fd;
-	int		i;
-
-	i = 0;
-	rdr = group->rdr_head;
-	out_fd = (int *)malloc((sizeof(int) * (group->out_len + 2)));
-	if (out_fd == 0)
-		error_input();
-	out_fd[i++] = STDOUT;
-	while (1)
-	{
-		//out_rdr이면 파일 다 열고 fd 저장해두기. (int 배열에 저장, 맨 처음 값은 std_out)
-		if (rdr->type == OUT_RDR)
-		{
-			rdr->fd = open(rdr->filename, O_RDONLY);
-			if (rdr->fd == -1)
-				error_input();
-			out_fd[i++] = rdr->fd; //파일 읽고 배열에 fd 저장
-		}
-		if (rdr == group->rdr_tail)
-			break ;
-		rdr = rdr->next_rdr;
-	}
-	out_fd[i] = 0;
 }
 
 void	end_input(t_group *group)

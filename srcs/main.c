@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:44 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/11 14:22:10 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 14:37:19 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[], char *envp[])
 
 	tcgetattr(STDIN_FILENO, &term);
 	init(argc, argv, envp, &minishell); //변수 및 환경변수 초기화
-	start_shell(); 	//명령 프롬프트 실행,
+	start_shell(&minishell); 	//명령 프롬프트 실행,
 					//while 문 안에서 입력 받은 후 (파싱 및 유효성검사>실행) 계속 반복
 	tcgetattr(STDIN_FILENO, &term);
     return (0);

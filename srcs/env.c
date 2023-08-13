@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 15:15:18 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/11 15:26:11 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 15:27:37 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void    envp_to_list(char **envp, t_minishell *minishell)
     {
         variable = get_variable(envp[i]);
         value = get_value(envp[i]);
-        add_new_envnode(variable, value, minishell);
+        add_new_envnode(variable, value, minishell->env_head);
         i++;
     }
 }

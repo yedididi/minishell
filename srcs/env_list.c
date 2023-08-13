@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 16:41:09 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/12 11:23:38 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 15:20:02 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ t_env_node	*create_new_envnode(char *variable, char *value)
 	return (newnode);
 }
 
-void	add_new_envnode(char *variable, char *value, t_minishell *minishell)
+void	add_new_envnode(char *variable, char *value, t_env_node *env_head)
 {
 	t_env_node	*newnode;
 	t_env_node	*before_tail_node;
 
 	newnode = create_new_envnode(variable, value);
 	newnode->next_node = NULL;
-	before_tail_node = minishell->env_head;
+	before_tail_node = env_head;
 	while (1)
 	{
 		if (before_tail_node->next_node == 0)
@@ -59,11 +59,11 @@ void	free_envnode(t_env_node *node)
 	free(node);
 }
 
-t_env_node	*search_envnode(char *variable, t_minishell *minishell)
+t_env_node	*search_envnode(char *variable, t_env_node *env_head)
 {
 	t_env_node	*node;
 
-	node = minishell->env_head->next_node;
+	node = env_head->next_node;
 	while (node)
 	{
 		if (ft_strncmp(variable, node->variable, ft_strlen(variable)) == 0)
