@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 10:26:51 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 11:25:31 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,20 @@ void	execute_group(t_group *group)
 	i = 0;
 	//마지막까지 확인한 뒤, 최종 입력 리다이렉션을 명령어의 입력으로 넣어준다. (dup 한번)
 	rdr_in = find_input_rdr(group);
-	dup2(rdr_in->fd, STDIN);
+	if (rdr_in)
+		dup2(rdr_in->fd, STDIN);
+	//명령어의 출력값을 출력 리다이렉션 파일들에게 하나씩 전달해준다. (dup 여러번)
+	if (group->out_len != 0)
+	{
+		out_fd = find_output_rdr(group);
+		while (out_fd[i + 1] != 0)
+		{
+			dup2(out_fd[i], out_fd[i + 1]);
+			i++;
+		}
+	}
 	//명령어를 실행
 	execute_cmd();
-	//명령어의 출력값을 출력 리다이렉션 파일들에게 하나씩 전달해준다. (dup 여러번)
-	out_fd = find_output_rdr(group);
-	while (out_fd[i] != 0)
-	{
-		dup2(out_fd[i], out_fd[i + 1]);
-		i++;
-	}
 }
 
 t_rdr	*find_input_rdr(t_group *group)

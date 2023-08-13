@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:03:28 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 10:33:06 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/13 11:25:27 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_group
 	int             pipe[2]; //-1로 초기화
 	pid_t			pid; //NULL로 초기화
 	int				out_len; //0 init
+	char			**envp; //main에서 받은 envp 값 그대로
 	struct s_group	*prev_group;
 	struct s_group	*next_group;
 }	t_group;
