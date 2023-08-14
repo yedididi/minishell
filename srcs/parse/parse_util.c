@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/12 11:21:14 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/12 11:21:48 by yejlee2          ###   ########.fr       */
+/*   Created: 2023/08/14 10:42:49 by boran             #+#    #+#             */
+/*   Updated: 2023/08/14 11:12:16 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/minishell.h"
+#include "../../incs/parse.h"
 
 int	ft_isspace(char ch)
 {
@@ -40,4 +40,16 @@ char	*ft_strndup(char *src, int len)
 	}
 	result[i] = '\0';
 	return (result);
+}
+
+int	ft_strcmp(char *str1, char *str2)
+{
+	while (*str1 && *str2 && *str1 == *str2)
+	{
+		++str1;
+		++str2;
+	}
+	if (!*str1 && !*str2)
+		return (1);
+	return (0);
 }

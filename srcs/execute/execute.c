@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 14:32:55 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/14 10:20:49 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	execute(t_minishell *minishell)
 			pipe(group->pipe);
 			group->pid = fork();
 			if (group->pid < 0) //포크 에러
-				error_input();
-			//그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
+				error_input(); //그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
 			else if (group->pid == 0) //자식 프로세스
 			{
 				execute_group_pipe(group);
@@ -35,8 +34,14 @@ void	execute(t_minishell *minishell)
 		}
 		else //뒤에 파이프, 그룹이 더 없는 경우
 		{
-			execute_group(group);
-			return ;
+			group->pid = fork();
+			if (group->pid < 0) //포크 에러
+				error_input(); //그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
+			else if (group->pid == 0) //자식 프로세스
+			{
+				execute_group(group);
+				exit (0); //해당 자식 프로세스 종료
+			}
 		}
 		group = group->next_group;
 	}
@@ -92,11 +97,17 @@ void	execute_group_pipe(t_group *group)
 
 void	end_input(t_group *group)
 {
+	int status;
+
 	while (group->pid)
 	{
-		waitpid(group->pid, NULL, 0);
-		close(group->pipe[0]);
-		close(group->pipe[1]);
+		waitpid(group->pid, &status, 0);
+		EXIT_STATUS = WEXITSTATUS(status);
+		if (group->next_group)
+		{
+			close(group->pipe[0]);
+			close(group->pipe[1]);
+		}
 		group = group->next_group;
 	}
 }

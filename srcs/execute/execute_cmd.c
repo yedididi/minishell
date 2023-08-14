@@ -17,13 +17,13 @@ void	execute_cmd(t_group *group)
 	if (ft_strncmp("echo\0", group->wd_head->word, 5) == 0)
 		echo(group);
 	else if (ft_strncmp("cd\0", group->wd_head->word, 3) == 0)
-		cd(group->wd_head->next->word, group->env_head);
+		cd(group->wd_head->next_wd->word, group->env_head);
 	else if (ft_strncmp("pwd\0", group->wd_head->word, 4) == 0)
 		pwd();
 	else if (ft_strncmp("export\0", group->wd_head->word, 7) == 0)
-		export(group->env_head, group->wd_head->next->word);
+		export(group->env_head, group->wd_head->next_wd);
 	else if (ft_strncmp("unset\0", group->wd_head->word, 6) == 0)
-		unset(group->env_head, group->wd_head->next->word);
+		unset(group->env_head, group->wd_head->next_wd->word);
 	else if (ft_strncmp("env\0", group->wd_head->word, 4) == 0)
 		env(group);
 	else if (ft_strncmp("exit\0", group->wd_head->word, 5) == 0)
@@ -100,7 +100,7 @@ char	**get_option(t_group *group)
 	while (wd)
 	{
 		wd_len++;
-		wd = wd->next;
+		wd = wd->next_wd;
 	}
 	option = (char **)malloc(sizeof(char *) * (wd_len + 1));
 	if (option == 0)
@@ -109,7 +109,7 @@ char	**get_option(t_group *group)
 	while (wd)
 	{
 		option[i] = wd->word;
-		wd = wd->next;
+		wd = wd->next_wd;
 		i++;
 	}
 	option[i] = NULL;

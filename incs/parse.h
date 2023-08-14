@@ -6,33 +6,38 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:03:28 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 15:31:46 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/14 11:15:32 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSE_H
 # define PARSE_H
 
+# include <stdio.h>
+# include <stdlib.h>
+
 # define WHITESPACE "\t\n\v\f\r "
 
 enum e_token_type
 {
-	word,
-	redir,
-	filename,
+	word_tkn,
+	redir_tkn,
+	pipe_tkn,
 } t_token_type;
 
+// linked list
 typedef struct s_token
 {
-	char			*data;
 	int				type;
-	struct s_list	*next;
+	char			*data;
+	struct s_token	*next_tkn;
 }	t_token;
 
+// linked list
 typedef struct s_wd
 {
 	char		*word;
-	struct s_wd	*next;
+	struct s_wd	*next_wd;
 }	t_wd;
 
 enum e_rdr_type
@@ -73,17 +78,18 @@ typedef struct s_group //원형아님
 	struct s_group	*next_group;
 }	t_group;
 
-// t_list	*ft_tokenize(char *line);
+// return NULL when error occurs
+t_token	*ft_tokenize(char *line);
+t_group	*ft_parser(char *line);
 
 int		ft_isspace(char ch);
 char	*ft_strndup(char *src, int len);
 int		ft_strcmp(char *str1, char *str2);
 
-// t_token	*ft_newtoken(char *data);
-// void	ft_addtoken(t_list **head, t_list *new_token);
-// t_wd	*ft_newword(t_token *token);
-// void	ft_addword(t_wd **head, t_wd *new_word);
-// t_rdr	*ft_newredir(t_token *token);
-// void	ft_addredir(t_rdr **head, t_rdr *new_redir);
+// return 0 when error occurs
+int	ft_addtoken(t_token **head, int type, char *data);
+int	ft_addword(t_wd **head, char *data);
+int	ft_addredir(t_rdr **head, char *redir, char *filename);
+int	ft_addgroup(t_group **head, t_wd *word, t_rdr *redir);
 
 #endif

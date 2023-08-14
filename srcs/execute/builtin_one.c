@@ -29,29 +29,39 @@ void	env(t_group *group)
 	}
 }
 
-void	export(t_env_node *env_head, char *str)
+void	export(t_env_node *env_head, t_wd *wd)
 {
-	int i;
+	while (wd)
+	{
+		// if (!chk_equal_sign(wd->word) && is_alpha_and_(wd->word)) //등호가 없고 영문자 및 _ 로 구성이 되었다면 뛰어넘기
+		// 	wd = wd->next_wd;
+		if (!chk_equal_sign(wd->word) && !is_alpha_and_(wd->word)) //등호가 없고 숫자 및 특수기호로만 구성되어있다면 에러문구
+			error_input();
+		else if (chk_equal_sign(wd->word)) //등호가 있으면 적용
+			export_equal(env_head, wd->word);
+		wd = wd->next_wd;
+	}
+}
+
+void	export_equal(t_env_node *env_head, char *str)
+{
 	char *variable;
 	char *value;
-	char **doub;
-	
-	//variable=value에서 =기준으로 나누어주자.
-	// chk_valid();
+	int	i;
+
 	i = 0;
-	if ((*str <= '0' && *str >= '9') || *str == '=' || is_whitespace(str) == 0 || str_find_chr(str, '=') == 0) //variable이 숫자나 =로 시작하거나 공백이 있으면 오류
-		error_input(); //오류문장출력해야댐
-	doub = ft_split(str, '=');
-
-
-	
-
-
-
-
+	if (*str != '_' && !ft_isalpha(*str)) //첫번째 문자가 영문자나 _가 아니면 에러문구+끝
+		error_input();
+	variable = (char *)malloc(sizeof(char) * (str_find_chr(str, '=') + 1));
+	value = (char *)malloc(sizeof(char) * (ft_strlen(str) - str_find_chr(str, '=')));
+	if (variable == 0 && value == 0)
+		error_input();
 	while (*str != '=')
 	{
-		variable[i++] = *str;
+		if (ft_isalnum(*str) && *str == '_')
+			variable[i++] = *str;
+		else
+			error_input(); //variable, value 모두 free 해주고 오류메세지 출력 후 line으로 돌아가기
 		str++;
 	}
 	variable[i] = '\0';

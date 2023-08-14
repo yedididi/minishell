@@ -5,40 +5,117 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/10 09:34:12 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 14:49:26 by yejlee2          ###   ########.fr       */
+/*   Created: 2023/08/13 14:16:56 by boran             #+#    #+#             */
+/*   Updated: 2023/08/14 11:22:40 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
 
-t_list *parse(char *line, t_minishell *minishell)
+/*
+int	ft_quotelen(char *line, char quote)
 {
-	t_list *token;
+	int	len;
 
-	(void)minishell;
-	token = ft_tokenize(line);
-	return (token);
+	len = 0;
+	while (line[len] && line[len] != quote)
+	{
+//		if (ft_isspace(line[len]))
+//			ft_error(command not found)
+		++len;
+	}
+	if (!line[len])
+		return (-1);
+	return (len);
+}
+*/
+
+void	ft_lexer(t_token **token, char *line)
+{
 }
 
-t_list	*ft_tokenize(char *line)
+t_token	*ft_tokenizer(char *line)
 {
-	t_list	*token;
+	t_token	*tokens;
 	int		len;
 
-	token = NULL;
+	tokens = NULL;
 	while (*line)
 	{
 		if (ft_isspace(*line))
 			++line;
+		else if (*line == '|')
+		{
+			ft_addtoken(&tokens, pipe_tkn, ft_strndup(line, 1));
+			++line;
+			if (*line == '|')
+				return (tokens);
+		}
+		else if (*line == '<' || *line == '>')
+		{
+			len = 1;
+			if (*(line + 1) == *line)
+				++len;
+			ft_addtoken(&tokens, redir_tkn, ft_strndup(line, len));
+			line += len;
+		}
 		else
 		{
 			len = 0;
-			while (!ft_isspace(line[len]))
+			while (line[len] && !ft_isspace(line[len]) && line[len] != '|' \
+					&& line[len] != '<' && line[len] != '>')
 				++len;
-			ft_lstadd(&token, ft_newnode(ft_strndup(line, len)));
+			ft_addtoken(&tokens, word_tkn, ft_strndup(line, len));
 			line += len;
 		}
 	}
-	return (token);
+	return (tokens);
+}
+
+t_group	*ft_parser(t_token *tokens)
+{
+	t_token	*tmp;
+	t_wd	*word;
+	t_rdr	*redir;
+	t_group	*groups;
+
+	groups = NULL;
+	while(tokens)
+	{
+		word = NULL;
+		redir = NULL;
+		while (tokens && tokens->type == word_tkn)
+		{
+			ft_addword(&word, tokens->data);
+			tokens = tokens->next_tkn;
+		}
+		while (tokens && tokens->type != pipe_tkn)
+		{
+			if (tokens->type == redir_tkn)
+			{
+				if (tokens->next_tkn->type == word_tkn)
+				{
+					ft_addredir(&redir, tokens->data, tokens->next_tkn->data);
+					tokens = tokens->next_tkn;
+				}
+				else
+					ft_addredir(&redir, tokens->data, NULL);
+				tokens = tokens->next_tkn;
+			}
+			else if (tokens->type == word_tkn)
+			{
+				ft_addword(&word, tokens->data);
+				tokens = tokens->next_tkn;
+			}
+		}
+		ft_addgroup(&groups, word, redir);
+		if (tokens && tokens->type == pipe_tkn)
+			tokens = tokens->next_tkn;
+	}
+	return (groups);
+}
+
+t_group  *parse(char *line, t_minishell *minishell)
+{
+	ft_parser(ft_tokenizer(line));
 }

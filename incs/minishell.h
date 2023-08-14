@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 16:17:10 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/14 11:22:23 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 #define REDIRECTION "<>"
 #define	STDIN	0
 #define	STDOUT	1
+
+int EXIT_STATUS;
  
 typedef struct s_list
 {
@@ -45,7 +47,7 @@ void	error();
 
 void    rl_replace_line (const char *text, int clear_undo);
 
-void	start_shell(t_minishell *minishell);
+void	start_shell(t_minishell *minishell, char *envp[]);
 
 void    init(int argc, char *argv[], char *envp[], t_minishell *minishell);
 void	set_signal();
@@ -72,7 +74,7 @@ t_rdr	*find_input_rdr(t_group *group);
 int	    *find_output_rdr(t_group *group);
 
 void	env(t_group *group);
-void	export(t_env_node *env_head, char *str);
+void	export(t_env_node *env_head, t_wd *word);
 void	unset(t_env_node *env_head, char *variable);
 void	pwd(void);
 void	cd(char *dirname, t_env_node *env_head);
@@ -87,7 +89,7 @@ char	**get_option(t_group *group);
 void	error_input(void);
 int	    str_find_chr(char *str, char c);
 
-t_list  *parse(char *line, t_minishell *minishell);
+t_group  *parse(char *line, t_minishell *minishell);
 t_list	*ft_tokenize(char *line);
 
 int	    ft_isspace(char ch);

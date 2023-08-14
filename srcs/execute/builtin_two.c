@@ -21,7 +21,7 @@ void    echo(t_group *group)
     {
         ft_putstr_fd(wd->word, 1);
         write(1, " ", 1);
-        wd = wd->next;
+        wd = wd->next_wd;
     }
     write(1, "\n", 1);
 }

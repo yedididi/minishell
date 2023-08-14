@@ -33,3 +33,26 @@ int	str_find_chr(char *str, char c)
 	}
 	return (0);
 }
+
+int	is_alpha_and_(char *str)
+{
+	while (*str)
+	{
+		if (*str == '_' || ft_isalpha(*str) == 1)
+			str++;
+		else
+			return (0);
+	}
+	return (1);
+}
+
+int	chk_equal_sign(char *str)
+{
+	while (*str)
+	{
+		if (*str == '=')
+			return (1);
+		str++;
+	}
+	return (0);
+}
