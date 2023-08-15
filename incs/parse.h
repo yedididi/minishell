@@ -80,7 +80,7 @@ typedef struct s_group //원형아님
 
 // return NULL when error occurs
 t_token	*ft_tokenize(char *line);
-t_group	*ft_parser(char *line);
+t_group	*ft_parser(t_token *tokens);
 
 int		ft_isspace(char ch);
 char	*ft_strndup(char *src, int len);

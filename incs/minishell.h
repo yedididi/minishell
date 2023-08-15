@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/14 11:22:23 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/15 13:15:04 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@
 # include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <dirent.h>
 #include "../libft/libft.h"
 #include "parse.h"
+#include "../get_next_line/get_next_line_bonus.h"
 
 #define WHITESPACE "\t\n\v\f\r "
 #define REDIRECTION "<>"
@@ -90,7 +92,7 @@ void	error_input(void);
 int	    str_find_chr(char *str, char c);
 
 t_group  *parse(char *line, t_minishell *minishell);
-t_list	*ft_tokenize(char *line);
+t_token	*ft_tokenizer(char *line);
 
 int	    ft_isspace(char ch);
 char	*ft_strndup(char *src, int len);

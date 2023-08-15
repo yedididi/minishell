@@ -27,7 +27,9 @@ SRCS = srcs/main.c \
 		srcs/execute/execute.c \
 		srcs/parse/parse.c \
 		srcs/parse/parse_list.c \
-		srcs/parse/parse_util.c
+		srcs/parse/parse_util.c \
+		get_next_line/get_next_line_bonus.c \
+		get_next_line/get_next_line_utils_bonus.c
 OBJS = $(SRCS:.c=.o)
 INCS = incs
 LIBFT = libft/libft.a

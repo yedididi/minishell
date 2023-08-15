@@ -88,7 +88,3 @@ int	*find_output_rdr(t_group *group)
 	return (out_fd);
 }
 
-if (rdr->type == outout_rdr)
-{
-	
-}
