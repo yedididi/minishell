@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 16:48:47 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/15 14:07:30 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,13 @@ void	env(t_group *group)
 {
 	t_env_node	*node;
 
-	node = group->env_head->next_node;
+	node = group->env_head->next_node; //env 인자가 들어왔을 때 예외처리
+	if (group->wd_head->next_wd)
+	{
+		ft_putstr_fd("env: ", 1);
+		ft_putstr_fd(group->wd_head->next_wd->word, 1);
+		ft_putstr_fd(": No such file or directory\n", 1);
+	}
 	while (1)
 	{
 		ft_putstr_fd(node->variable, 1);
