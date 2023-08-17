@@ -6,15 +6,15 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 16:41:09 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/11 15:15:45 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:43:53 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/minishell.h"
 
-void    init(int argc, char *argv[], char *envp[], t_minishell *minishell)
+void	init(int argc, char *argv[], char *envp[], t_minishell *minishell)
 {
-	struct termios  new_term;
+	struct termios	new_term;
 
 	//각종 초기화를 진행
 	//환경변수 전역변수화
@@ -37,19 +37,19 @@ void    init(int argc, char *argv[], char *envp[], t_minishell *minishell)
 	(void)argv;
 }
 
-void	set_signal()
+void	set_signal(void)
 {
 	signal(SIGINT, handler); // CTRL + C > prompt 출력
-    // signal(SIGTERM, handler); // CTRL + D > 쉘 종료 >>> 이미 앞에서 처리함
-    signal(SIGQUIT, SIG_IGN); // CTRL + / > 아무것도 안함
+	// signal(SIGTERM, handler); // CTRL + D > 쉘 종료 >>> 이미 앞에서 처리함
+	signal(SIGQUIT, SIG_IGN); // CTRL + / > 아무것도 안함
 }
 
-void handler(int signum)
+void	handler(int signum)
 {
-    if (signum != SIGINT)
-        return;
+	if (signum != SIGINT)
+		return ;
 	write(1, "\n", 1);
-    rl_on_new_line();
-    rl_replace_line("", 1);
-    rl_redisplay();
+	rl_on_new_line();
+	rl_replace_line("", 1);
+	rl_redisplay();
 }

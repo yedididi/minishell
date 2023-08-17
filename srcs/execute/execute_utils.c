@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 11:28:33 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/15 14:07:30 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:39:57 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	error_input(void)
 
 int	str_find_chr(char *str, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])

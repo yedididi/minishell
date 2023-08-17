@@ -6,33 +6,33 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/15 13:15:04 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:44:52 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <signal.h>
-#include <termios.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <signal.h>
+# include <termios.h>
 # include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <dirent.h>
-#include "../libft/libft.h"
-#include "parse.h"
-#include "../get_next_line/get_next_line_bonus.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <dirent.h>
+# include "../libft/libft.h"
+# include "parse.h"
+# include "../get_next_line/get_next_line_bonus.h"
 
-#define WHITESPACE "\t\n\v\f\r "
-#define REDIRECTION "<>"
-#define	STDIN	0
-#define	STDOUT	1
+# define WHITESPACE "\t\n\v\f\r "
+# define REDIRECTION "<>"
+# define STDIN 0
+# define STDOUT 1
 
 int EXIT_STATUS;
- 
+
 typedef struct s_list
 {
 	char			*data;
@@ -73,15 +73,17 @@ void	execute_group_pipe(t_group *group);
 void	end_input(t_group *group);
 
 t_rdr	*find_input_rdr(t_group *group);
-int	    *find_output_rdr(t_group *group);
+int		*find_output_rdr(t_group *group);
+int		open_out(t_rdr *rdr, int type);
 
 void	env(t_group *group);
 void	export(t_env_node *env_head, t_wd *word);
+void	export_equal(t_env_node *env_head, char *str, char *value, char *variable);
 void	unset(t_env_node *env_head, char *variable);
 void	pwd(void);
-void	cd(char *dirname, t_env_node *env_head);
 
 void    echo(t_group *group);
+void	cd(char *dirname, t_env_node *env_head);
 
 void	execute_cmd(t_group *group);
 void	execute_regular(t_group *group);

@@ -4,6 +4,7 @@
         "unistd.h": "c",
         "stdio.h": "c",
         "limits.h": "c",
-        "history.h": "c"
+        "history.h": "c",
+        "sstream": "c"
     }
 }

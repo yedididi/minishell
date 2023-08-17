@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/15 14:07:30 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:44:40 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ void	env(t_group *group)
 
 void	export(t_env_node *env_head, t_wd *wd)
 {
+	char	*variable;
+	char	*value;
+
 	while (wd)
 	{
 		// if (!chk_equal_sign(wd->word) && is_alpha_and_(wd->word)) //등호가 없고 영문자 및 _ 로 구성이 되었다면 뛰어넘기
@@ -44,24 +47,24 @@ void	export(t_env_node *env_head, t_wd *wd)
 		if (!chk_equal_sign(wd->word) && !is_alpha_and_(wd->word)) //등호가 없고 숫자 및 특수기호로만 구성되어있다면 에러문구
 			error_input();
 		else if (chk_equal_sign(wd->word)) //등호가 있으면 적용
-			export_equal(env_head, wd->word);
+		{
+			if (wd->word != '_' && !ft_isalpha(wd->word)) //첫번째 문자가 영문자나 _가 아니면 에러문구+끝
+				error_input();
+			variable = (char *)malloc(sizeof(char) * (str_find_chr(wd->word, '=') + 1));
+			value = (char *)malloc(sizeof(char) * (ft_strlen(wd->word) - str_find_chr(wd->word, '=')));
+			if (variable == 0 && value == 0)
+				error_input();
+			export_equal(env_head, wd->word, value, variable);
+		}
 		wd = wd->next_wd;
 	}
 }
 
-void	export_equal(t_env_node *env_head, char *str)
+void	export_equal(t_env_node *env_head, char *str, char *value, char *variable)
 {
-	char *variable;
-	char *value;
 	int	i;
 
 	i = 0;
-	if (*str != '_' && !ft_isalpha(*str)) //첫번째 문자가 영문자나 _가 아니면 에러문구+끝
-		error_input();
-	variable = (char *)malloc(sizeof(char) * (str_find_chr(str, '=') + 1));
-	value = (char *)malloc(sizeof(char) * (ft_strlen(str) - str_find_chr(str, '=')));
-	if (variable == 0 && value == 0)
-		error_input();
 	while (*str != '=')
 	{
 		if (ft_isalnum(*str) && *str == '_')
@@ -85,7 +88,7 @@ void	export_equal(t_env_node *env_head, char *str)
 void	unset(t_env_node *env_head, char *variable)
 {
 	t_env_node	*node;
-	
+
 	node = env_head;
 	while (node)
 	{
@@ -102,33 +105,10 @@ void	unset(t_env_node *env_head, char *variable)
 
 void	pwd(void)
 {
-	char cwd[256];
+	char	cwd[256];
 
-   	if (getcwd(cwd, sizeof(cwd)))
-    	ft_putstr_fd(cwd, 1);
+	if (getcwd(cwd, sizeof(cwd)))
+		ft_putstr_fd(cwd, 1);
 	else
-       	error();
-}
-
-void	cd(char *dirname, t_env_node *env_head)
-{
-	t_env_node	*pwd;
-	t_env_node	*oldpwd;
-
-	if (chdir(dirname) == 1)
-	{
-		//print error statement
-		ft_putstr_fd("bash: cd: ", 1);
-		ft_putstr_fd(dirname, 1);
-		ft_putstr_fd(": No such file or directory", 1);
-	}
-	else
-	{
-		//change OLDPWD, PWD
-		oldpwd = search_envnode("OLDPWD", env_head);
-		pwd = search_envnode("PWD", env_head);
-		free(oldpwd->value);
-		oldpwd->value = pwd->value;
-		pwd->value = dirname;
-	}
+		error();
 }

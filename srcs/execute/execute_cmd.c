@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:34:31 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 16:48:53 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:12:52 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	**get_option(t_group *group)
 	char	**option;
 	t_wd	*wd;
 	int		wd_len;
-	int 	i;
+	int		i;
 
 	wd_len = 0;
 	i = 0;

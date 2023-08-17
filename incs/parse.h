@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:03:28 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/14 11:15:32 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:30:19 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 # define WHITESPACE "\t\n\v\f\r "
 
-enum e_token_type
+enum	e_token_type
 {
 	word_tkn,
 	redir_tkn,

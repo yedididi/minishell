@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/14 10:20:49 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:41:19 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	execute_group_pipe(t_group *group)
 
 void	end_input(t_group *group)
 {
-	int status;
+	int	status;
 
 	while (group->pid)
 	{
