@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/17 10:44:40 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 12:47:48 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	export(t_env_node *env_head, t_wd *wd)
 			error_input();
 		else if (chk_equal_sign(wd->word)) //등호가 있으면 적용
 		{
-			if (wd->word != '_' && !ft_isalpha(wd->word)) //첫번째 문자가 영문자나 _가 아니면 에러문구+끝
+			if (*(wd->word) != '_' && !ft_isalpha(*(wd->word))) //첫번째 문자가 영문자나 _가 아니면 에러문구+끝
 				error_input();
 			variable = (char *)malloc(sizeof(char) * (str_find_chr(wd->word, '=') + 1));
 			value = (char *)malloc(sizeof(char) * (ft_strlen(wd->word) - str_find_chr(wd->word, '=')));
@@ -108,7 +108,10 @@ void	pwd(void)
 	char	cwd[256];
 
 	if (getcwd(cwd, sizeof(cwd)))
+	{
 		ft_putstr_fd(cwd, 1);
+		ft_putstr_fd("\n", 1);
+	}
 	else
 		error();
 }

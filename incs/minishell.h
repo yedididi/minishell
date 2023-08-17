@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/17 10:44:52 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 12:26:28 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ void	export_equal(t_env_node *env_head, char *str, char *value, char *variable);
 void	unset(t_env_node *env_head, char *variable);
 void	pwd(void);
 
-void    echo(t_group *group);
-void	cd(char *dirname, t_env_node *env_head);
+void	echo(t_group *group);
+void	exiit(t_group *group);
+void	cd(t_group *group, t_env_node *env_head);
 
 void	execute_cmd(t_group *group);
 void	execute_regular(t_group *group);
@@ -91,15 +92,21 @@ char	*get_cmd_path(char **path, char *cmd);
 char	**get_option(t_group *group);
 
 void	error_input(void);
-int	    str_find_chr(char *str, char c);
+int		str_find_chr(char *str, char c);
+int		is_alpha_and_(char *str);
+int		chk_equal_sign(char *str);
 
-t_group  *parse(char *line, t_minishell *minishell);
+void	ft_parse(t_minishell *minishell, char **envp, char *line);
 t_token	*ft_tokenizer(char *line);
 
-int	    ft_isspace(char ch);
+int		ft_isspace(char ch);
 char	*ft_strndup(char *src, int len);
 
 t_list	*ft_newnode(char *data);
 void	ft_lstadd(t_list **head, t_list *node);
+
+void	heredoc(t_group	*group_head);
+int	ch_outout(t_rdr *rdr);
+void	fill_heredoc(t_rdr *rdr, int random_fd);
 
 #endif

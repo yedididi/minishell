@@ -6,7 +6,7 @@
 #    By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/08 14:35:13 by yejlee2           #+#    #+#              #
-#    Updated: 2023/08/13 14:34:10 by yejlee2          ###   ########.fr        #
+#    Updated: 2023/08/17 11:36:31 by yejlee2          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,10 @@ SRCS = srcs/main.c \
 		srcs/execute/execute_utils.c \
 		srcs/execute/execute.c \
 		srcs/parse/parse.c \
+		srcs/parse/parser.c \
 		srcs/parse/parse_list.c \
-		srcs/parse/parse_util.c \
+		srcs/parse/parse_utils.c \
+		srcs/parse/parse_heredoc.c \
 		get_next_line/get_next_line_bonus.c \
 		get_next_line/get_next_line_utils_bonus.c
 OBJS = $(SRCS:.c=.o)
@@ -59,5 +61,10 @@ fclean : clean
 re :
 	make fclean
 	make all
+
+only : 
+	make fclean
+	make all
+	make clean
 
 .PHONY : all clean fclean re .c.o

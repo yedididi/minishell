@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 12:55:30 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/17 10:39:48 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 16:44:13 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_rdr	*find_input_rdr(t_group *group)
 	//원형연결리스트 (t_rdr) 돌면서 입력 리다이렉션 (<) 찾는다. 또 나오면 갱신함.
 	while (1)
 	{
+		if (rdr == NULL) //리다이렉션이 아예 없으면
+			return (rdr_in);
 		if (rdr->type == in_rdr)
 			rdr_in = rdr;
 		if (rdr->type == out_rdr || rdr->type == outout_rdr)
@@ -82,4 +84,5 @@ int	open_out(t_rdr *rdr, int type)
 			error_input();
 		return (rdr->fd);
 	}
+	return (0);
 }

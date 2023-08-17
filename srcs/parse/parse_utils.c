@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_util.c                                       :+:      :+:    :+:   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/14 10:42:49 by boran             #+#    #+#             */
-/*   Updated: 2023/08/14 11:12:16 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 11:16:00 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,31 @@ int	ft_strcmp(char *str1, char *str2)
 	}
 	if (!*str1 && !*str2)
 		return (1);
+	return (0);
+}
+
+int	ft_is_invalid(t_token *tokens)
+{
+	t_token	*pre;
+	t_token	*next;
+
+	pre = tokens;
+	if (!pre || !pre->next_tkn)
+		return (0);
+	while (pre->next_tkn)
+	{
+		next = pre->next_tkn;
+		if (pre->type == redir_tkn && next->type != word_tkn)
+		{
+			printf("syntax error near unexpected token `%s\'\n", next->data);
+			return (1);
+		}
+		pre = next;
+	}
+	if (pre->type == pipe_tkn)
+	{
+		printf("syntax error pipe can't be last token\n");
+		return (1);
+	}
 	return (0);
 }

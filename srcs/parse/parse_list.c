@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:16:42 by boran             #+#    #+#             */
-/*   Updated: 2023/08/14 11:12:00 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 16:27:02 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_rdr	*ft_newredir(char *redir, char *filename)
 		new_redir->type = out_rdr;
 	else if (ft_strcmp(redir, "<<"))
 		new_redir->type = inin_rdr;
-	else
+	else if (ft_strcmp(redir, ">>"))
 		new_redir->type = outout_rdr;
 	new_redir->filename = filename;
 	new_redir->prev_rdr = new_redir;

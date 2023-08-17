@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:34:31 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/17 10:12:52 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 12:44:25 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	execute_cmd(t_group *group)
 	if (ft_strncmp("echo\0", group->wd_head->word, 5) == 0)
 		echo(group);
 	else if (ft_strncmp("cd\0", group->wd_head->word, 3) == 0)
-		cd(group->wd_head->next_wd->word, group->env_head);
+		cd(group, group->env_head);
 	else if (ft_strncmp("pwd\0", group->wd_head->word, 4) == 0)
 		pwd();
 	else if (ft_strncmp("export\0", group->wd_head->word, 7) == 0)
@@ -27,9 +27,19 @@ void	execute_cmd(t_group *group)
 	else if (ft_strncmp("env\0", group->wd_head->word, 4) == 0)
 		env(group);
 	else if (ft_strncmp("exit\0", group->wd_head->word, 5) == 0)
-		exiit();
+		exiit(group);
 	else
-		execute_regular(group);
+	{
+		group->pid = fork();
+		if (group->pid < 0) //포크 에러
+			error_input(); //그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
+		else if (group->pid == 0) //자식 프로세스
+		{
+			execute_regular(group);
+			exit (0); //해당 자식 프로세스 종료
+		}
+		waitpid(group->pid, NULL, 0);
+	}
 }
 
 void	execute_regular(t_group *group)

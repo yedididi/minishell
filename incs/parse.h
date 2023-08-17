@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:03:28 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/17 10:30:19 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 12:13:30 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,24 +52,24 @@ typedef struct s_rdr //원형
 {
 	int				type;	// IN_RDR, OUT_RDR, ININ_RDR, OUTOUT_RDR
 	char			*filename;
-    int				fd;
+	int				fd;
 	struct s_rdr	*prev_rdr;
 	struct s_rdr	*next_rdr;
 }	t_rdr;
 
-typedef struct  s_env_node
+typedef struct s_env_node
 {
-    char    *variable;
-    char    *value;
-    struct  s_env_node  *next_node;
-} t_env_node;
+	char				*variable;
+	char				*value;
+	struct s_env_node	*next_node;
+}	t_env_node;
 
 typedef struct s_group //원형아님
 {
 	t_wd			*wd_head;	// head : command, others : option & path
 	t_rdr			*rdr_head;
 	t_rdr			*rdr_tail;
-	int             pipe[2]; //-1로 초기화
+	int				pipe[2]; //-1로 초기화
 	pid_t			pid; //NULL로 초기화
 	int				out_len; //0 init
 	char			**envp; //main에서 받은 envp 값 그대로 넣으면 됨
@@ -79,17 +79,19 @@ typedef struct s_group //원형아님
 }	t_group;
 
 // return NULL when error occurs
-t_token	*ft_tokenize(char *line);
+t_token	*ft_tokenizer(char *line);
 t_group	*ft_parser(t_token *tokens);
 
 int		ft_isspace(char ch);
 char	*ft_strndup(char *src, int len);
 int		ft_strcmp(char *str1, char *str2);
+int		ft_is_invalid(t_token *tokens);
 
 // return 0 when error occurs
-int	ft_addtoken(t_token **head, int type, char *data);
-int	ft_addword(t_wd **head, char *data);
-int	ft_addredir(t_rdr **head, char *redir, char *filename);
-int	ft_addgroup(t_group **head, t_wd *word, t_rdr *redir);
+int		ft_addtoken(t_token **head, int type, char *data);
+int		ft_addword(t_wd **head, char *data);
+t_rdr	*ft_newredir(char *redir, char *filename);
+int		ft_addredir(t_rdr **head, char *redir, char *filename);
+int		ft_addgroup(t_group **head, t_wd *word, t_rdr *redir);
 
 #endif

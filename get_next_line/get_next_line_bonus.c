@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 13:12:46 by yejlee2           #+#    #+#             */
-/*   Updated: 2022/12/08 11:50:42 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/17 11:03:09 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ char	*return_line(char **remainder)
 		return (0);
 	else if (nl >= 0)
 	{
-		return_this = ft_strndup(*remainder, nl + 1);
+		return_this = ft_strnndup(*remainder, nl + 1);
 		next_remain = *remainder + nl + 1;
-		tmp = ft_strndup(next_remain, ft_strlen(next_remain));
+		tmp = ft_strnndup(next_remain, ft_strlen(next_remain));
 		free(*remainder);
 		*remainder = tmp;
 		return (return_this);
@@ -66,7 +66,7 @@ char	*nl_notfound(char **remainder, char *buf, int fd)
 			break ;
 		buf[byte] = '\0';
 		if (*remainder == 0)
-			tmp = ft_strndup(buf, byte);
+			tmp = ft_strnndup(buf, byte);
 		else
 			tmp = ft_strjoin(*remainder, buf);
 		free(*remainder);
