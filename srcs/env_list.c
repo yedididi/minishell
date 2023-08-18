@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 16:41:09 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/13 15:20:02 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/18 14:27:42 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_env_node	*create_new_envnode(char *variable, char *value)
 
 	newnode = (t_env_node *)malloc(sizeof(t_env_node));
 	if (newnode == 0)
-		error('y');
+		error();
 	newnode->next_node = 0;
 	newnode->variable = variable;
 	newnode->value = value;

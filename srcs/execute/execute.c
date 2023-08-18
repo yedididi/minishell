@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/18 09:47:01 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/18 14:27:39 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,26 @@ void	execute(t_minishell *minishell)
 	group = minishell->group_head;
 	while (group)
 	{
-		// if (group->next_group) //뒤에 파이프가 있는 경우
-		// {
-		// 	pipe(group->pipe);
-		// 	group->pid = fork();
-		// 	if (group->pid < 0) //포크 에러
-		// 		error_input(); //그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
-		// 	else if (group->pid == 0) //자식 프로세스
-		// 	{
-		// 		execute_group_pipe(group);
-		// 		exit (0); //해당 자식 프로세스 종료
-		// 	}
-		// 	//else, 그러니까 부모 프로세스는 파이프를 더 찾는다
-		// }
-		// else //뒤에 파이프, 그룹이 더 없는 경우
-		// 		execute_group(group);
-		// }
-		execute_group(group);
+		if (group->next_group || group->prev_group) //파이프가 있는 경우
+		{
+			if (group->next_group)
+				pipe(group->pipe);
+			if (group->prev_group && group->prev_group->prev_group)
+			{
+				close(group->prev_group->prev_group->pipe[0]);
+				close(group->prev_group->prev_group->pipe[1]);
+			}
+			group->pid = fork();
+			if (group->pid < 0) //포크 에러
+				error_input(); //그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
+			else if (group->pid == 0) //자식 프로세스
+			{
+				execute_group_pipe(group);
+				exit (0); //해당 자식 프로세스 종료
+			}
+		}
+		else //파이프가 없는 경우
+			execute_group(group);
 		group = group->next_group;
 	}
 	end_input(minishell->group_head);
@@ -93,7 +96,6 @@ void	execute_group_pipe(t_group *group)
 		close(group->pipe[1]);
 	}
 	execute_group(group);
-
 }
 
 void	end_input(t_group *group)
@@ -102,13 +104,11 @@ void	end_input(t_group *group)
 
 	while (group)
 	{
-		waitpid(group->pid, &status, 0);
+		if (group->pid != 0)
+			waitpid(group->pid, &status, 0);
 		EXIT_STATUS = WEXITSTATUS(status);
-		if (group->next_group)
-		{
-			close(group->pipe[0]);
-			close(group->pipe[1]);
-		}
+		close(group->pipe[0]);
+		close(group->pipe[1]);
 		group = group->next_group;
 	}
 }
