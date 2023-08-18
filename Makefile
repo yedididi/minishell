@@ -6,7 +6,7 @@
 #    By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/08 14:35:13 by yejlee2           #+#    #+#              #
-#    Updated: 2023/08/18 11:03:31 by yejlee2          ###   ########.fr        #
+#    Updated: 2023/08/18 14:39:30 by yejlee2          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRCS = srcs/main.c \
 		srcs/execute/execute_cmd.c \
 		srcs/execute/execute_utils.c \
 		srcs/execute/execute.c \
+		srcs/execute/execute_pipe.c \
 		srcs/parse/parse.c \
 		srcs/parse/parser.c \
 		srcs/parse/parse_list.c \

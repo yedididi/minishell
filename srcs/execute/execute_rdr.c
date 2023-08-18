@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 12:55:30 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/18 10:35:51 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/18 14:50:29 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ t_rdr	*find_input_rdr(t_group *group)
 
 	rdr = group->rdr_head;
 	rdr_in = NULL;
-	//원형연결리스트 (t_rdr) 돌면서 입력 리다이렉션 (<) 찾는다. 또 나오면 갱신함.
 	while (1)
 	{
-		if (rdr == NULL) //리다이렉션이 아예 없으면
+		if (rdr == NULL)
 			return (rdr_in);
 		if (rdr->type == in_rdr)
 			rdr_in = rdr;
@@ -55,7 +54,6 @@ int	*find_output_rdr(t_group *group)
 	out_fd[i++] = STDOUT;
 	while (1)
 	{
-		//out_rdr이면 파일 다 열고 fd 저장해두기. (int 배열에 저장, 맨 처음 값은 std_out)
 		if (rdr->type == out_rdr)
 			out_fd[i++] = open_out(rdr, out_rdr);
 		else if (rdr->type == outout_rdr)

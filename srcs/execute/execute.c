@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 09:34:56 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/18 14:27:39 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/18 14:50:24 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,38 +19,42 @@ void	execute(t_minishell *minishell)
 	group = minishell->group_head;
 	while (group)
 	{
-		if (group->next_group || group->prev_group) //파이프가 있는 경우
+		if (group->next_group || group->prev_group)
 		{
-			if (group->next_group)
-				pipe(group->pipe);
-			if (group->prev_group && group->prev_group->prev_group)
-			{
-				close(group->prev_group->prev_group->pipe[0]);
-				close(group->prev_group->prev_group->pipe[1]);
-			}
-			group->pid = fork();
-			if (group->pid < 0) //포크 에러
-				error_input(); //그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
-			else if (group->pid == 0) //자식 프로세스
-			{
-				execute_group_pipe(group);
-				exit (0); //해당 자식 프로세스 종료
-			}
+			fork_for_pipe(group);
 		}
-		else //파이프가 없는 경우
+		else
 			execute_group(group);
 		group = group->next_group;
 	}
 	end_input(minishell->group_head);
 }
 
+void	fork_for_pipe(t_group *group)
+{
+	if (group->next_group)
+		pipe(group->pipe);
+	if (group->prev_group && group->prev_group->prev_group)
+	{
+		close(group->prev_group->prev_group->pipe[0]);
+		close(group->prev_group->prev_group->pipe[1]);
+	}
+	group->pid = fork();
+	if (group->pid < 0)
+		error_input();
+	else if (group->pid == 0)
+	{
+		execute_group_pipe(group);
+		exit (0);
+	}
+}
+
 void	execute_group(t_group *group)
 {
-	pid_t	pid = 0;
+	pid_t	pid;
 	t_rdr	*rdr_in;
-	int		*out_fd;
 
-	out_fd = NULL;
+	pid = 0;
 	rdr_in = find_input_rdr(group);
 	if (group->out_len != 0 || rdr_in)
 	{
@@ -58,57 +62,31 @@ void	execute_group(t_group *group)
 		if (pid < 0)
 			error_input();
 		else if (pid == 0)
-		{
-			if (rdr_in)
-				dup2(rdr_in->fd, STDIN);
-			if (group->out_len != 0)
-			{
-				out_fd = find_output_rdr(group);
-				dup2(out_fd[group->out_len], STDOUT);
-			}
-			execute_cmd(group);
-			while (group->out_len)
-			{
-				close(out_fd[group->out_len]);
-				group->out_len--;
-			}
-			close(rdr_in->fd);
-			exit(0);
-		}
+			rdr_child(rdr_in, group);
 		waitpid(pid, NULL, 0);
 	}
 	else
 		execute_cmd(group);
 }
 
-void	execute_group_pipe(t_group *group)
+void	rdr_child(t_rdr *rdr_in, t_group *group)
 {
-	if (group->prev_group) //전 파이프와 연결
-	{
-		close(group->prev_group->pipe[1]);
-		dup2(group->prev_group->pipe[0], STDIN);
-		close(group->prev_group->pipe[0]); //여기서 닫아도 될가..........
-	}
-	if (group->next_group) //뒤 파이프와 연결
-	{
-		close(group->pipe[0]);
-		dup2(group->pipe[1], STDOUT);
-		close(group->pipe[1]);
-	}
-	execute_group(group);
-}
+	int	*out_fd;
 
-void	end_input(t_group *group)
-{
-	int	status;
-
-	while (group)
+	out_fd = NULL;
+	if (rdr_in)
+		dup2(rdr_in->fd, STDIN);
+	if (group->out_len != 0)
 	{
-		if (group->pid != 0)
-			waitpid(group->pid, &status, 0);
-		EXIT_STATUS = WEXITSTATUS(status);
-		close(group->pipe[0]);
-		close(group->pipe[1]);
-		group = group->next_group;
+		out_fd = find_output_rdr(group);
+		dup2(out_fd[group->out_len], STDOUT);
 	}
+	execute_cmd(group);
+	while (group->out_len)
+	{
+		close(out_fd[group->out_len]);
+		group->out_len--;
+	}
+	close(rdr_in->fd);
+	exit(0);
 }

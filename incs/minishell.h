@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 14:39:58 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/18 11:12:00 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/18 14:45:01 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,9 @@ void		execute(t_minishell *minishell);
 void		execute_group(t_group *group);
 void		execute_group_pipe(t_group *group);
 void		end_input(t_group *group);
+
+void		fork_for_pipe(t_group *group);
+void		rdr_child(t_rdr *rdr_in, t_group *group);
 
 t_rdr		*find_input_rdr(t_group *group);
 int			*find_output_rdr(t_group *group);

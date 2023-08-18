@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:34:31 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/17 12:44:25 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/18 14:56:56 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,10 @@ void	execute_cmd(t_group *group)
 	else
 	{
 		group->pid = fork();
-		if (group->pid < 0) //포크 에러
-			error_input(); //그룹이 아닌, 한줄 전체의 입력에 대해서 프로세스를 종료하고, (그러니까 자식 프로세스들만), 부모만 살려 다음 프롬프트 출력 
-		else if (group->pid == 0) //자식 프로세스
-		{
+		if (group->pid < 0)
+			error_input();
+		else if (group->pid == 0)
 			execute_regular(group);
-			exit (0); //해당 자식 프로세스 종료
-		}
 		waitpid(group->pid, NULL, 0);
 	}
 }
@@ -65,7 +62,8 @@ void	execute_regular(t_group *group)
 	execve(cmd_path, option, group->envp);
 	// free_double(sp_path);
 	// free_double(option);
-	free(cmd_path);
+	// free(cmd_path);
+	//exit(0);
 }
 
 char	*get_cmd_path(char **path, char *cmd)
