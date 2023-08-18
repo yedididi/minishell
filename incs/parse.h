@@ -6,7 +6,7 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 10:03:28 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/17 12:13:30 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/18 11:12:03 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_rdr //원형
 {
 	int				type;	// IN_RDR, OUT_RDR, ININ_RDR, OUTOUT_RDR
 	char			*filename;
+	char			*stop_str;
 	int				fd;
 	struct s_rdr	*prev_rdr;
 	struct s_rdr	*next_rdr;

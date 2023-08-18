@@ -6,7 +6,7 @@
 #    By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/08 14:35:13 by yejlee2           #+#    #+#              #
-#    Updated: 2023/08/17 11:36:31 by yejlee2          ###   ########.fr        #
+#    Updated: 2023/08/18 11:03:31 by yejlee2          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRCS = srcs/main.c \
 		srcs/parse/parse_list.c \
 		srcs/parse/parse_utils.c \
 		srcs/parse/parse_heredoc.c \
+		srcs/parse/parse_heredoc_utils.c \
 		get_next_line/get_next_line_bonus.c \
 		get_next_line/get_next_line_utils_bonus.c
 OBJS = $(SRCS:.c=.o)

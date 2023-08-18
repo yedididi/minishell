@@ -6,46 +6,37 @@
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 11:19:15 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/17 16:43:10 by yejlee2          ###   ########.fr       */
+/*   Updated: 2023/08/18 11:09:53 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
 
-void	fill_heredoc(t_rdr *rdr, int random_fd)
+int	ch_inin(t_rdr *rdr)
 {
-	int		status;
-	pid_t	pid;
-	char	*str;
+	char	*random_name;
+	int		random_fd;
+	char	*dir_file;
 
-	pid = fork();
-	if (pid == 0)
-	{
-		str = get_next_line(0);
-		while (str)
-		{
-			write(random_fd, str, ft_strlen(str));
-			str = get_next_line(0);
-		}
-		close(random_fd);
-		exit(0);
-	}
-	else if (pid == -1)
-		error();
-	waitpid(pid, &status, 0);
-	EXIT_STATUS = WEXITSTATUS(status);
-	close(random_fd);
-	rdr->type = out_rdr;
+	random_name = make_random_file();
+	rdr->stop_str = ft_strjoin(rdr->filename, "\n");
+	free(rdr->filename);
+	dir_file = ft_strndup(random_name, 8);
+	if (chk_for_dup_file(random_name) == 0)
+		return (0);
+	free(random_name);
+	rdr->filename = ft_strjoin("/tmp/", dir_file);
+	random_fd = open(rdr->filename, O_RDWR | O_CREAT | O_APPEND, 0644);
+	free(dir_file);
+	fill_heredoc(rdr, random_fd);
+	return (1);
 }
 
-int	ch_outout(t_rdr *rdr)
+char	*make_random_file(void)
 {
-	char			random_name[8];
-	int				random_fd;
-	DIR				*tmp_dir;
-	struct dirent	*tmp_info;
-	char            *dir_file;
-    int             i;
+	char	random_name[8];
+	int		random_fd;
+	int		i;
 
 	i = 0;
 	random_fd = open("/dev/urandom", O_RDONLY);
@@ -59,7 +50,14 @@ int	ch_outout(t_rdr *rdr)
 		random_name[i] = random_name[i] % 26 + 'a';
 		i++;
 	}
-	rdr->filename = ft_strdup(random_name);
+	return (ft_strndup(random_name, 8));
+}
+
+int	chk_for_dup_file(char *random_name)
+{
+	DIR				*tmp_dir;
+	struct dirent	*tmp_info;
+
 	tmp_dir = opendir("/tmp");
 	tmp_info = readdir(tmp_dir);
 	while (tmp_info)
@@ -71,10 +69,7 @@ int	ch_outout(t_rdr *rdr)
 		}
 		tmp_info = readdir(tmp_dir);
 	}
-	dir_file = ft_strjoin("/tmp/", random_name);
-	random_fd = open(dir_file, O_RDWR | O_CREAT | O_APPEND, 0644); //random file open
-	free(dir_file);
-	fill_heredoc(rdr, random_fd);
+	closedir(tmp_dir);
 	return (1);
 }
 
@@ -93,7 +88,7 @@ void	heredoc(t_group	*group_head)
 			{
 				while (1)
 				{
-					if (ch_outout(rdr) == 1)
+					if (ch_inin(rdr) == 1)
 						break ;
 				}
 			}
