@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/08 14:39:44 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/27 17:37:28 by yejlee2          ###   ########.fr       */
+/*   Created: 2022/11/24 13:13:15 by yejlee2           #+#    #+#             */
+/*   Updated: 2022/12/08 13:13:29 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/minishell.h"
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
-int	main(int argc, char *argv[], char *envp[])
-{
-	t_minishell		minishell;
-	struct termios	term;
+# include <unistd.h>
+# include <stdlib.h>
+# include "../libft/libft.h"
 
-	tcgetattr(STDIN_FILENO, &term);
-	init(argc, envp, &minishell);
-	start_shell(&minishell, envp);
-	(void)argv;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	return (0);
-}
+# ifndef OPEN_MAX
+#  define OPEN_MAX 256
+# endif
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+# endif
+
+char	*get_next_line(int fd);
+char	*ft_strnndup(const char *s1, int byte);
+
+#endif

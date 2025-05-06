@@ -1,38 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_list.c                                       :+:      :+:    :+:   */
+/*   execute_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yejlee2 <yejlee2@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/12 11:21:12 by yejlee2           #+#    #+#             */
-/*   Updated: 2023/08/12 11:21:31 by yejlee2          ###   ########.fr       */
+/*   Created: 2023/08/21 15:03:38 by yejlee2           #+#    #+#             */
+/*   Updated: 2023/08/27 17:41:25 by yejlee2          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/minishell.h"
 
-t_list	*ft_newnode(char *data)
+void	fork_fail(void)
 {
-	t_list	*new_node;
-
-	new_node = malloc(sizeof(t_list));
-	new_node->data = data;
-	new_node->next = NULL;
-	return (new_node);
+	ft_printf_err("fork has failed\n");
+	exit(1);
 }
 
-void	ft_lstadd(t_list **head, t_list *node)
+void	malloc_fail(void)
 {
-	t_list	*tmp;
+	ft_printf_err("malloc has failed\n");
+	exit(1);
+}
 
-	if (!*head)
-		*head = node;
-	else
-	{
-		tmp = *head;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = node;
-	}
+void	pipe_fail(void)
+{
+	ft_printf_err("pipe has failed\n");
+	exit(1);
+}
+
+void	read_fail(void)
+{
+	ft_printf_err("read failed\n");
+	exit(1);
 }
